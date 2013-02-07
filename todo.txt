@@ -1,0 +1,7 @@
+Line 9: What is letterpositions doing for us as a global variable?
+Line 28: What is a better name for the variable blanks? It starts as the obscured solution but then becomes the solution thus far.
+Line 35: How can we make this line more clear? Add a comment?
+Lines 35 and 36: Make the text prettifying into a function to avoid duplication.
+Line 65: Check for "invalid" characters. If someone enters an invalid character, tell them which characters are invalid.
+Make each commented block a function. Call the function in the existing order.
+Line 59: Depending on what percentage of words are greater than 8 characters, it may be faster to randomly choose a word first and then check to see if it is at least 9 characters.

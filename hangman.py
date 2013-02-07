@@ -1,234 +1,14 @@
-import os
+from os import system
 from random import choice
-os.system("cls")
+from art import hangman
+
+system("cls")
 
 '''Start of Global variables'''
 #gameon = True
 letterpositions = []
 incorrectguesses = []
-#art adapted from http://ascii.co.uk/art/hangman
-hangman = [
-r'''
- ___________.._______
-| .__________________|
-| | / /
-| |/ /
-| | /
-| |/
-| |
-| |
-| |
-| |
-| |
-| |
-| |
-| |
-| |
-| |
-| |
-| |
-""""""""""""""""""""|"""|
-|"|"""""""""""""""""'"|"|
-| |                   | |
-: :                   : :
-. .                   . .
-''',
-r'''
- ___________.._______
-| .__________________|
-| | / /
-| |/ /
-| | /
-| |/
-| |
-| |
-| |
-| |
-| |
-| |
-| |
-| |          ||
-| |          ||
-| |          ||
-| |          ||
-| |         / |
-""""""""""""""""""""|"""|
-|"|"""""""""""""""""'"|"|
-| |                   | |
-: :                   : :
-. .                   . .
-''',
-r'''
- ___________.._______
-| .__________________|
-| | / /
-| |/ /
-| | /
-| |/
-| |
-| |
-| |
-| |
-| |
-| |
-| |
-| |          ||'||
-| |          || ||
-| |          || ||
-| |          || ||
-| |         / | | \
-""""""""""""""""""""|"""|
-|"|"""""""""""""""""'"|"|
-| |                   | |
-: :                   : :
-. .                   . .
-''',
-r'''
- ___________.._______
-| .__________________|
-| | / /
-| |/ /
-| | /
-| |/
-| |
-| |
-| |         .-`--'.
-| |         Y . . Y
-| |          |   |
-| |          | . |
-| |          |   |
-| |          ||'||
-| |          || ||
-| |          || ||
-| |          || ||
-| |         / | | \
-""""""""""""""""""""|"""|
-|"|"""""""""""""""""'"|"|
-| |                   | |
-: :                   : :
-. .                   . .
-''',
-r'''
- ___________.._______
-| .__________________|
-| | / /
-| |/ /
-| | /
-| |/
-| |
-| |
-| |         .-`--'.
-| |        /Y . . Y
-| |       // |   |
-| |      //  | . |
-| |     ')   |   |
-| |          ||'||
-| |          || ||
-| |          || ||
-| |          || ||
-| |         / | | \
-""""""""""""""""""""|"""|
-|"|"""""""""""""""""'"|"|
-| |                   | |
-: :                   : :
-. .                   . .
-''',
-r'''
- ___________.._______
-| .__________________|
-| | / /
-| |/ /
-| | /
-| |/
-| |
-| |
-| |         .-`--'.
-| |        /Y . . Y\
-| |       // |   | \\
-| |      //  | . |  \\
-| |     ')   |   |   (`
-| |          ||'||
-| |          || ||
-| |          || ||
-| |          || ||
-| |         / | | \
-""""""""""""""""""""|"""|
-|"|"""""""""""""""""'"|"|
-| |                   | |
-: :                   : :
-. .                   . .
-''',
-r'''
- ___________.._______
-| .__________________|
-| | / /
-| |/ /
-| | /          .-''.
-| |/          /  _  \
-| |           |  `/,|
-| |           | `_.'
-| |         .-`--'.
-| |        /Y . . Y\
-| |       // |   | \\
-| |      //  | . |  \\
-| |     ')   |   |   (`
-| |          ||'||
-| |          || ||
-| |          || ||
-| |          || ||
-| |         / | | \
-""""""""""""""""""""|"""|
-|"|"""""""""""""""""'"|"|
-| |                   | |
-: :                   : :
-. .                   . .
-''',
-r'''
- ___________.._______
-| .__________))______|
-| | / /      ||
-| |/ /       ||
-| | /        ||.-''.
-| |/         |/  _  \
-| |          ||  `/,|
-| |          (\\`_.'
-| |         .-`--'.
-| |        /Y . . Y\
-| |       // |   | \\
-| |      //  | . |  \\
-| |     ')   |   |   (`
-| |          ||'||
-| |          || ||
-| |          || ||
-| |          || ||
-| |         / | | \
-""""""""""|_`-' `-' |"""|
-|"|"""""""\ \       '"|"|
-| |        \ \        | |
-: :         \ \       : :
-. .          `'       . .
-
-'''
-]
-
-
-
 '''End of global variables'''
-
-'''Start of function definitions'''
-
-def print5lines():
-  '''Print 5 blank lines'''
-  print""
-  print""
-  print""
-  print""
-  print""
-
-def print10lines():
-  '''Print 10 blank lines'''
-  print5lines()
-  print5lines()
 
 def guessindex(guess):
   '''Creates a list of index values where the guess appears'''
@@ -249,66 +29,59 @@ def solve(guess, letterpositions):
 
 def nextscreen(guess, incorrectguesses):
   '''Initiate the next play screen.'''
-  os.system("cls")
-  print10lines()
-  guessindex(guess)
-  letterpositions = guessindex(guess)
+  system("cls")
   print hangman[len(incorrectguesses)]
-  print '[%s]' % ' '.join(map(str,solve(guess, letterpositions)))
-  print "Incorrect Guesses: ", incorrectguesses
-
-'''#Check if solution achieved
-def isgameon(solution,solve):
-  return solution != solve'''
+  print '[%s]' % ' '.join(map(str,solve(guess, (guessindex(guess)))))
+  print "Incorrect Guesses: %s" % ' '.join(map(str, incorrectguesses))
 
 #Acquire new guess from player
 def getguess():
   guess = raw_input("Guess a letter. ")
   return guess
 
+def getscrabbleword():
+    WORD_LIST = "sowpods.txt"
+    wordlist = [word.lower().strip() for word in file(WORD_LIST, 'r').readlines()]
+    shortlist = []
+    for word in wordlist:
+        if len(word) > 8:
+            shortlist.append(word)
+    solution = list(choice(shortlist))
+    return solution
 
-'''End of function definitions'''
-
-
-
-#Welcome screen
-
-print "Welcome to Hangman!"
-print""
-usescrabble = raw_input("Do you want to play from the scrabble dictionary? ")
-print""
-
-if usescrabble == "yes" or usescrabble == "Yes":
-  WORD_LIST = "sowpods.txt"
-  wordlist = file(WORD_LIST, 'r').readlines()
-  # Get rid of newlines
-  wordlist = [word.lower().strip() for word in wordlist]
-  shortlist = []
-  for word in wordlist:
-    if len(word) > 8:
-        shortlist.append(word)
-  solution = list(choice(shortlist))
-else:
-    #User enters phrase for hangman
-    rawsolution = raw_input("Enter a phrase for the hanged man. ")
+def welcomescreen():
+    print "Welcome to Hangman!"
     print""
-    solution = list(rawsolution.lower())
+    usescrabble = raw_input("Do you want to play from the scrabble dictionary? ")
+    print""
+    if usescrabble == "yes" or usescrabble == "Yes":
+        solution = getscrabbleword()
+    else:
+        #User enters phrase for hangman
+        solution = list(raw_input("Enter a phrase for the hanged man. ").lower())
+    return solution
+    
+def createtheblanks(solution):
+    blanks = []
+    for letter in solution:
+      if letter == " ":
+        blanks.append(" ")
+      else:
+        blanks.append("-")
+    return blanks
+    
+def initiatestocks():
+    system("cls")
+    print hangman[0]
+    print '[%s]' % ' '.join(map(str,blanks))
+    print""
+    
+solution = welcomescreen()
 
-#Create the blanks
-blanks = []
-for letter in solution:
-  if letter == " ":
-    display = " "
-    blanks.append(display)
-  else:
-    display = "-"
-    blanks.append(display)
+blanks = createtheblanks(solution)
 
-#Initiate the first play screen
-os.system("cls")
-print hangman[0]
-print '[%s]' % ' '.join(map(str,blanks))
-print""
+initiatestocks()
+
 guess = getguess()
 
 #Add incorrect guesses to a list
@@ -320,6 +93,7 @@ while solution != solve(guess, letterpositions):
   nextscreen(guess, incorrectguesses)
   if len(incorrectguesses) == len(hangman)-1:
     print "You have lost."
+    #Eventually show a picture of the guy from Space Quest.
     print ""
     print "The answers was", '[%s]' % ' '.join(map(str,solution))
     print ""
@@ -331,24 +105,6 @@ while solution != solve(guess, letterpositions):
 else:
   print "Congratulations! You've got it!"
 
-
-
-'''
-solve = []
-
-index = 0
-if guess in solution:
-  while index < len(solution)-1:
-    if guess == solution[index]:
-      solve.append(guess)
-      index += 1
-    else:
-      solve.append("-")
-      index += 1
-
-
-print solve
-'''
 
 
 
