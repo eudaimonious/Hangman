@@ -1,6 +1,8 @@
 from os import system
+import string
 from random import choice
 from art import hangman
+
 
 system("cls")
 
@@ -22,10 +24,10 @@ def guessindex(guess):
   return letterpositions
 
 def solve(guess, letterpositions):
-  '''Rewrite the blanks list with the guess in place'''
+  '''Rewrite the solvedsofar list with the guess in place'''
   for index in letterpositions:
-    blanks[index] = guess
-  return blanks
+    solvedsofar[index] = guess
+  return solvedsofar
 
 def nextscreen(guess, incorrectguesses):
   '''Initiate the next play screen.'''
@@ -37,6 +39,9 @@ def nextscreen(guess, incorrectguesses):
 #Acquire new guess from player
 def getguess():
   guess = raw_input("Guess a letter. ")
+  if validguesstest(guess) == "Fail":
+    print "Let's try that again. Please guess a letter. "
+    guess = raw_input("Guess a letter. ")
   return guess
 
 def getscrabbleword():
@@ -49,6 +54,30 @@ def getscrabbleword():
     solution = list(choice(shortlist))
     return solution
 
+def validphrasetest(userinput):
+    validcharacters = string.letters + " "
+    for i in userinput:
+        if i not in validcharacters:
+            result = "Fail"
+            return result
+        else:
+            result = "Pass"
+    return result
+    
+def validguesstest(userinput):
+    validcharacters = string.letters
+    if len(userinput) > 1:
+        result = "Fail"
+        return result
+    elif userinput not in validcharacters:
+        result = "Fail"
+        return result
+    else:
+        result = "Pass"
+    return result
+    
+       
+            
 def welcomescreen():
     print "Welcome to Hangman!"
     print""
@@ -59,26 +88,29 @@ def welcomescreen():
     else:
         #User enters phrase for hangman
         solution = list(raw_input("Enter a phrase for the hanged man. ").lower())
+        if validphrasetest(solution) == "Fail":
+            print "Please try again, entering only letters and spaces."
+            solution = list(raw_input("Enter a phrase for the hanged man. ").lower())
     return solution
     
-def createtheblanks(solution):
-    blanks = []
+def createsolvedsofar(solution):
+    solvedsofar = []
     for letter in solution:
       if letter == " ":
-        blanks.append(" ")
+        solvedsofar.append(" ")
       else:
-        blanks.append("-")
-    return blanks
+        solvedsofar.append("-")
+    return solvedsofar
     
 def initiatestocks():
     system("cls")
     print hangman[0]
-    print '[%s]' % ' '.join(map(str,blanks))
+    print '[%s]' % ' '.join(map(str,solvedsofar))
     print""
     
 solution = welcomescreen()
 
-blanks = createtheblanks(solution)
+solvedsofar = createsolvedsofar(solution)
 
 initiatestocks()
 
